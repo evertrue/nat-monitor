@@ -1,4 +1,4 @@
-# Nat::Monitor
+# nat-monitor
 
 Monitors a quorum of NAT servers for an outage and reassigns the specified EC2 route table to point to a working server.
 
