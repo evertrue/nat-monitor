@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require 'nat-monitor'
+
+EtTools::NatMonitor.new(ARGV[0]).run
