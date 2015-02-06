@@ -174,5 +174,19 @@ describe EtTools::NatMonitor do
         @nat_monitor.heartbeat
       end
     end
+
+    context 'mocking and can\'t ping the master' do
+      before do
+        @nat_monitor.instance_variable_set(
+          :@conf,
+          @yaml_conf.merge('mocking' => true).merge(@defaults)
+        )
+      end
+
+      it 'does not steal the route when mocking is enabled' do
+        expect(@nat_monitor.connection).to_not receive(:replace_route)
+        @nat_monitor.heartbeat
+      end
+    end
   end
 end

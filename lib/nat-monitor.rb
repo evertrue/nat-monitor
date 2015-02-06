@@ -58,6 +58,7 @@ module EtTools
     def steal_route
       output 'Stealing route 0.0.0.0/0 on route table ' \
              "#{@conf['route_table_id']}"
+      return if @conf['mocking']
       connection.replace_route(
         @conf['route_table_id'],
         '0.0.0.0/0',
