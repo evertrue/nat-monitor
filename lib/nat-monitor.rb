@@ -6,8 +6,11 @@ module EtTools
     require 'yaml'
 
     def initialize(conf_file = nil)
-      @conf = YAML.load_file(conf_file || '/etc/nat_monitor.yml')
-      @conf = defaults.merge @conf
+      @conf = defaults.merge load_conf(conf_file)
+    end
+
+    def load_conf(conf_file = nil)
+      YAML.load_file(conf_file || '/etc/nat_monitor.yml')
     end
 
     def run

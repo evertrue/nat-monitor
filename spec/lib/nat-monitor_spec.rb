@@ -16,8 +16,9 @@ describe EtTools::NatMonitor do
                    ).merge(@other_nodes) }
 
     filepath = 'bogus_filename.yml'
-    allow(YAML).to receive(:load_file).with(filepath)
-      .and_return(@yaml_conf)
+
+    allow_any_instance_of(EtTools::NatMonitor).to receive(:load_conf)
+      .with(filepath).and_return(@yaml_conf)
 
     @nat_monitor = EtTools::NatMonitor.new(filepath)
 
