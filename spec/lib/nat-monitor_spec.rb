@@ -27,7 +27,6 @@ describe EtTools::NatMonitor do
                   'heartbeat_interval' => 10 }
 
     allow(@nat_monitor).to receive(:my_instance_id).and_return(@my_instance_id)
-    allow(@nat_monitor).to receive(:steal_route).and_return(true)
   end
 
   context 'fewer than 3 nodes are specified' do
@@ -50,7 +49,7 @@ describe EtTools::NatMonitor do
 
   context 'invalid route is specified' do
     before do
-      allow_any_instance_of(Fog::Compute::AWS).to receive(:route_tables)
+      expect(@nat_monitor.connection).to receive(:route_tables)
         .and_return [
           double('route_tables',
                  id: 'rtb-99999999')
@@ -150,18 +149,17 @@ describe EtTools::NatMonitor do
           .and_return false
         allow(@nat_monitor).to receive(:pingable?).with('1.1.1.3')
           .and_return true
-        allow_any_instance_of(Fog::Compute::AWS).to receive(:replace_route)
-          .with(@route_table_id, '0.0.0.0', @my_instance_id)
-          .and_return true
       end
 
       it 'computes the list of other nodes correctly' do
+        allow(@nat_monitor).to receive(:steal_route).and_return true
         expect(@nat_monitor).to receive(:other_nodes)
           .exactly(2).times.and_return(@other_nodes)
         @nat_monitor.heartbeat
       end
 
       it 'finds i-00000002 unreachable' do
+        allow(@nat_monitor).to receive(:steal_route).and_return true
         expect(@nat_monitor).to receive(:unreachable_nodes)
           .and_return('i-00000002' => '1.1.1.2')
         @nat_monitor.heartbeat
@@ -171,6 +169,13 @@ describe EtTools::NatMonitor do
         allow(@nat_monitor).to receive(:other_nodes)
           .and_return(@other_nodes)
         expect(@nat_monitor).to receive(:steal_route)
+        @nat_monitor.heartbeat
+      end
+
+      it 'sends correct replace route command' do
+        expect(@nat_monitor.connection).to receive(:replace_route)
+          .with(@route_table_id, '0.0.0.0/0', @my_instance_id)
+          .and_return true
         @nat_monitor.heartbeat
       end
     end
