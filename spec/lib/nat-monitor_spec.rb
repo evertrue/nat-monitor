@@ -144,7 +144,7 @@ describe EtTools::NatMonitor do
       end
     end
 
-    context 'and can\'t ping the master' do
+    context 'and only can\'t ping the master' do
       before do
         allow(@nat_monitor).to receive(:pingable?).with('1.1.1.2')
           .and_return false
