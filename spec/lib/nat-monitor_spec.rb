@@ -49,7 +49,6 @@ describe EtTools::NatMonitor do
   end
 
   context 'invalid route is specified' do
-    # connection.route_tables.map(&:id).include? route_id
     before do
       allow_any_instance_of(Fog::Compute::AWS).to receive(:route_tables)
         .and_return [
