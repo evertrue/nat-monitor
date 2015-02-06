@@ -57,8 +57,6 @@ describe EtTools::NatMonitor do
     end
 
     it 'exits with status 2' do
-      expect(@nat_monitor).to receive(:route_exists?).with(@route_table_id)
-        .and_return false
       expect(@nat_monitor).to receive(:exit).with(2)
       @nat_monitor.validate!
     end
@@ -128,8 +126,6 @@ describe EtTools::NatMonitor do
       end
 
       it 'counts unreachable nodes correctly' do
-        allow(@nat_monitor).to receive(:other_nodes)
-          .and_return(@other_nodes)
         expect(@nat_monitor).to receive(:unreachable_nodes)
           .and_return(@other_nodes)
         @nat_monitor.heartbeat
@@ -166,8 +162,6 @@ describe EtTools::NatMonitor do
       end
 
       it 'tries to steal the route' do
-        allow(@nat_monitor).to receive(:other_nodes)
-          .and_return(@other_nodes)
         expect(@nat_monitor).to receive(:steal_route)
         @nat_monitor.heartbeat
       end
