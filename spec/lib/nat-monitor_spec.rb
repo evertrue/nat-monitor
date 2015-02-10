@@ -11,6 +11,8 @@ describe EtTools::NatMonitor do
                      'i-00000003' => '1.1.1.3' }
 
     @yaml_conf = { 'route_table_id' => @route_table_id,
+                   'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+                   'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
                    'nodes' => (
                      { @my_instance_id => '1.1.1.1' }
                    ).merge(@other_nodes) }
@@ -35,6 +37,8 @@ describe EtTools::NatMonitor do
       @nat_monitor.instance_variable_set(
         :@conf,
         ({ 'route_table_id' => @route_table_id,
+           'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
+           'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
            'nodes' => @other_nodes })
       )
       allow(@nat_monitor).to receive(:route_exists?).with(any_args)
