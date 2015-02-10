@@ -63,7 +63,8 @@ module EtTools
       end
       cm = current_master
       unless un.include?(cm) # ...unless master is unreachable
-        output "current master (#{cm}) is still reachable"
+        output "Unreachable nodes: #{un.inspect}"
+        output "Current master (#{cm}) is still reachable"
         return
       end
       steal_route
