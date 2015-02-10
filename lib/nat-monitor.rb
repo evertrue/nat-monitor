@@ -93,8 +93,15 @@ module EtTools
 
     def connection
       @connection ||= begin
-        Fog::Compute::AWS.new(aws_access_key_id: 'AWS_ACCESS_KEY_ID',
-                              aws_secret_access_key: 'AWS_SECRET_ACCESS_KEY')
+        if @conf['aws_access_key_id']
+          options = { aws_access_key_id: @conf['aws_access_key_id'],
+                      aws_secret_access_key: @conf['aws_secret_access_key'] }
+        else
+          options = { use_iam_profile: true }
+        end
+
+        options[:endpoint] = @conf['aws_url'] if @conf['aws_url']
+        Fog::Compute::AWS.new(options)
       end
     end
 
