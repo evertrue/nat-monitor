@@ -106,9 +106,10 @@ module EtTools
     end
 
     def current_master
-      default_r = connection.route_tables.get(route_table_id).routes.find do |r|
-        r['destinationCidrBlock'] == '0.0.0.0/0'
-      end
+      default_r =
+        connection.route_tables.get(@conf['route_table_id']).routes.find do |r|
+          r['destinationCidrBlock'] == '0.0.0.0/0'
+        end
       default_r['instanceId']
     end
 
