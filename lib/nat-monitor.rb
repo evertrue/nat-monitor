@@ -51,10 +51,21 @@ module EtTools
     end
 
     def heartbeat
-      return if am_i_master?
+      if am_i_master?
+        output "Looks like I'm the master"
+        return
+      end
       un = unreachable_nodes
-      return if (un.count == other_nodes.keys.count) || # Next if I'm unreachable...
-                !un.include?(current_master) # ...unless master is unreachable
+      return if un.empty?
+      if un.count == other_nodes.keys.count # return if I'm unreachable...
+        output "No nodes are reachable. Seems I'm the unreachable one."
+        return
+      end
+      cm = current_master
+      unless un.include?(cm) # ...unless master is unreachable
+        output "current master (#{cm}) is still reachable"
+        return
+      end
       steal_route
     end
 
