@@ -172,7 +172,9 @@ describe EtTools::NatMonitor do
 
       it 'sends correct replace route command' do
         expect(@nat_monitor.connection).to receive(:replace_route)
-          .with(@route_table_id, '0.0.0.0/0', @my_instance_id)
+          .with(@route_table_id,
+                '0.0.0.0/0',
+                'InstanceId' => @my_instance_id)
           .and_return true
         @nat_monitor.heartbeat
       end

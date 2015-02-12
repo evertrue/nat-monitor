@@ -74,7 +74,7 @@ module EtTools
       connection.replace_route(
         @conf['route_table_id'],
         '0.0.0.0/0',
-        my_instance_id
+        'InstanceId' => my_instance_id
       )
     end
 
