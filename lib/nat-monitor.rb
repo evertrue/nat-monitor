@@ -147,7 +147,7 @@ module EtTools
     end
 
     def log(message, level = 'info')
-      Syslog.open($PROGRAM_NAME, Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
+      Syslog.open('nat-monitor', Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
         s.send(level, message)
       end
     end
