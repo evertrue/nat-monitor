@@ -4,6 +4,7 @@ module EtTools
     require 'net/ping'
     require 'fog'
     require 'yaml'
+    require 'syslog'
 
     def initialize(conf_file = nil)
       @conf = defaults.merge load_conf(conf_file)
@@ -31,10 +32,6 @@ module EtTools
         output '3 or more nodes are required to create a quorum'
         exit 3
       end
-    end
-
-    def output(message)
-      puts message
     end
 
     def defaults
@@ -140,6 +137,19 @@ module EtTools
 
     def master_node?(node_id)
       current_master == node_id
+    end
+
+    private
+
+    def output(message)
+      puts message
+      log message
+    end
+
+    def log(message, level = 'info')
+      Syslog.open($PROGRAM_NAME, Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
+        s.send(level, message)
+      end
     end
   end
 end
