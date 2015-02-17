@@ -42,7 +42,12 @@ module EtTools
 
     def main_loop
       loop do
-        heartbeat
+        begin
+          heartbeat
+        rescue => e
+          output "Caught #{e.class} exception: #{e.message}"
+          output e.backtrace
+        end
         sleep @conf['heartbeat_interval']
       end
     end
