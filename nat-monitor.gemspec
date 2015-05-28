@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'nat-monitor/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'nat-monitor'
+  spec.name          = 'sp-nat-monitor'
   spec.version       = EtTools::NatMonitor::VERSION
   spec.authors       = ['Eric Herot']
   spec.email         = ['eric.github@herot.com']

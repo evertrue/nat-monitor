@@ -5,6 +5,7 @@ module EtTools
     require 'fog'
     require 'yaml'
     require 'syslog'
+    require 'dogapi'
 
     def initialize(conf_file = nil)
       @conf = defaults.merge load_conf(conf_file)
@@ -28,8 +29,8 @@ module EtTools
       when !route_exists?(@conf['route_table_id'])
         output "Route #{@conf['route_table_id']} not found"
         exit 2
-      when @conf['nodes'].count < 3
-        output '3 or more nodes are required to create a quorum'
+      when @conf['nodes'].count < 2
+        output '2 or more nodes are required to create a quorum'
         exit 3
       end
     end
@@ -53,12 +54,14 @@ module EtTools
     end
 
     def heartbeat
+      un = unreachable_nodes
+      healthy_nodes =  @conf['nodes'].keys.count - un.count
       if am_i_master?
         output "Looks like I'm the master"
+
+        dd_metric(healthy_nodes)
         return
       end
-      un = unreachable_nodes
-      return if un.empty?
       if un.count == other_nodes.keys.count # return if I'm unreachable...
         output "No nodes are reachable. Seems I'm the unreachable one."
         return
@@ -67,6 +70,7 @@ module EtTools
       unless un.include?(cm) # ...unless master is unreachable
         output "Unreachable nodes: #{un.inspect}"
         output "Current master (#{cm}) is still reachable"
+        dd_metric(healthy_nodes)
         return
       end
       steal_route
@@ -75,7 +79,7 @@ module EtTools
     def steal_route
       output 'Stealing route 0.0.0.0/0 on route table ' \
              "#{@conf['route_table_id']}"
-      return if @conf['mocking']
+      #return if @conf['mocking']
       connection.replace_route(
         @conf['route_table_id'],
         '0.0.0.0/0',
@@ -155,6 +159,16 @@ module EtTools
       Syslog.open('nat-monitor', Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
         s.send(level, message)
       end
+    end
+
+    def dd_metric(metric)
+      dog = Dogapi::Client.new(@conf['dd_key'])
+      dog.emit_point(
+        "ec2.nat.heartbeat",
+        metric,
+        :host => @conf['host'],
+        :tags => @conf['tags']
+      )
     end
   end
 end
