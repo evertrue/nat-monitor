@@ -115,7 +115,10 @@ module EtTools
           options = { aws_access_key_id: @conf['aws_access_key_id'],
                       aws_secret_access_key: @conf['aws_secret_access_key'] }
         else
-          options = { use_iam_profile: true }
+          options = { 
+            use_iam_profile: true,
+            region: @conf['region'] || 'us-east-1'
+          }
         end
 
         options[:endpoint] = @conf['aws_url'] if @conf['aws_url']
