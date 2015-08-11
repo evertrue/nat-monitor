@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
 
   spec.add_runtime_dependency 'net-ping'
-  spec.add_runtime_dependency 'fog', '~> 1.23'
+  spec.add_runtime_dependency 'fog', '~> 1.23', '>= 1.30'
 end
