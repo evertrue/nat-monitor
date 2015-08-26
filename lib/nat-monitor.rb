@@ -114,6 +114,12 @@ module EtTools
           options = { use_iam_profile: true }
         end
 
+        if @conf['region']
+          options[:region] = @conf['region']
+        else
+          output "It is recommended to specify a region on the config_file because by default is us-east-1"
+        end
+
         options[:endpoint] = @conf['aws_url'] if @conf['aws_url']
         Fog::Compute::AWS.new(options)
       end
