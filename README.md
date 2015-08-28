@@ -2,6 +2,10 @@
 
 Monitors a quorum of NAT servers for an outage and reassigns the specified EC2 route table to point to a working server.
 
+## Requirements
+
+The basic AWS setup required to make this work is actually pretty complex. I recommend reading my [how-to blog post](http://evertrue.github.io/blog/2015/07/06/the-right-way-to-set-up-nat-in-ec2/). Feedback is highly appreciated.
+
 ## Installation
 
 Add this line to your application's Gemfile:
