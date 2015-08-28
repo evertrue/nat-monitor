@@ -114,7 +114,9 @@ module EtTools
           options = { use_iam_profile: true }
         end
 
+        options[:region] = @conf['region'] if @conf['region']
         options[:endpoint] = @conf['aws_url'] if @conf['aws_url']
+
         Fog::Compute::AWS.new(options)
       end
     end
