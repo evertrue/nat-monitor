@@ -3,5 +3,5 @@ require 'rspec/core/rake_task'
 
 desc 'Run RSpec unit tests'
 RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts = '--color --format progress'
+  t.rspec_opts = '--color --format documentation'
 end
