@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/nat-monitor.svg)](http://badge.fury.io/rb/nat-monitor)
+
 # nat-monitor
 
 Monitors a quorum of NAT servers for an outage and reassigns the specified EC2 route table to point to a working server.
