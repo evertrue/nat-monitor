@@ -13,6 +13,11 @@ describe EtTools::NatMonitor do
     @yaml_conf = { 'route_table_id' => @route_table_id,
                    'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
                    'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+                   'monitor' => {
+                     'begin'   => 'run',
+                     'success' => 'complete',
+                     'fail'    => 'fail'
+                   },
                    'nodes' => (
                      { @my_instance_id => '1.1.1.1' }
                    ).merge(@other_nodes) }
@@ -26,7 +31,8 @@ describe EtTools::NatMonitor do
 
     @defaults = { 'pings' => 3,
                   'ping_timeout' => 1,
-                  'heartbeat_interval' => 10 }
+                  'heartbeat_interval' => 10,
+                  'monitor_enabled' => false }
 
     allow(@nat_monitor).to receive(:my_instance_id).and_return(@my_instance_id)
   end
@@ -39,13 +45,17 @@ describe EtTools::NatMonitor do
         ({ 'route_table_id' => @route_table_id,
            'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
            'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
+           'monitor_enabled' => false,
            'nodes' => @other_nodes })
       )
       allow(@nat_monitor).to receive(:route_exists?).with(any_args)
         .and_return true
     end
 
-    it 'exits with status 3' do
+    it 'sends a fail ping and exits with status 3' do
+      expect(@nat_monitor).to receive(:notify_monitor).with(
+        'fail',
+        '3 or more nodes are required to create a quorum')
       expect(@nat_monitor).to receive(:exit).with(3)
       @nat_monitor.validate!
     end
@@ -60,7 +70,10 @@ describe EtTools::NatMonitor do
         ]
     end
 
-    it 'exits with status 2' do
+    it 'sends a fail ping and exits with status 2' do
+      expect(@nat_monitor).to receive(:notify_monitor).with(
+        'fail',
+        'Route rtb-00000000 not found')
       expect(@nat_monitor).to receive(:exit).with(2)
       @nat_monitor.validate!
     end
@@ -70,11 +83,15 @@ describe EtTools::NatMonitor do
     before do
       @nat_monitor.instance_variable_set(
         :@conf,
+        'monitor_enabled' => false,
         'nodes' => ({ @my_instance_id => '1.1.1.1' }).merge(@other_nodes)
       )
     end
 
-    it 'exits with status 1' do
+    it 'sends a fail ping and exits with status 1' do
+      expect(@nat_monitor).to receive(:notify_monitor).with(
+        'fail',
+        'route_table_id not specified')
       expect(@nat_monitor).to receive(:exit).with(1)
       @nat_monitor.validate!
     end

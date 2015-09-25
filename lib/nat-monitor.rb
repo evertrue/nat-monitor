@@ -37,6 +37,7 @@ module EtTools
 
       return unless exit_code
 
+      notify_monitor 'fail', msg
       output msg
       exit exit_code
     end
@@ -44,15 +45,20 @@ module EtTools
     def defaults
       { 'pings' => 3,
         'ping_timeout' => 1,
-        'heartbeat_interval' => 10 }
+        'heartbeat_interval' => 10,
+        'monitor_enabled' => false }
     end
 
     def main_loop
       loop do
         begin
+          notify_monitor 'begin'
           heartbeat
+          notify_monitor 'success'
         rescue => e
-          output "Caught #{e.class} exception: #{e.message}"
+          msg = "Caught #{e.class} exception: #{e.message}"
+          notify_monitor 'fail', msg
+          output msg
           output e.backtrace
         end
         sleep @conf['heartbeat_interval']
@@ -153,6 +159,14 @@ module EtTools
       current_master == node_id
     end
 
+    def notify_monitor(status, msg = nil)
+      return unless @conf['monitor_enabled']
+      url = monitor_url status
+      url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
+
+      Net::HTTP.get(URI url)
+    end
+
     private
 
     def output(message)
@@ -164,6 +178,10 @@ module EtTools
       Syslog.open('nat-monitor', Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
         s.send(level, message)
       end
+    end
+
+    def monitor_url(status)
+      @conf['monitor'][status]
     end
   end
 end

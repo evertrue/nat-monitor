@@ -49,6 +49,7 @@ Optional properties include (Values shown are the defaults):
 pings: 3
 ping_timeout: 1
 heartbeat_interval: 10
+monitor_enabled: false
 ```
 
 Optional AWS configuration include:
@@ -62,6 +63,17 @@ region: us-east-1
 Note that:
 
 - If you don't specify the AWS credentials it will use the IAM role of the instance
+
+The NAT Monitor has the ability to report out, via a simple URL request, its start, success, and failures. This functionality is modeled after what [Cronitor.io](http://cronitor.io) expects.
+
+Requisite configuration needed:
+
+```yaml
+monitor:
+    begin: your.url/run
+    success: your.url/complete
+    fail: your.url/fail
+```
 
 ## Contributing
 
