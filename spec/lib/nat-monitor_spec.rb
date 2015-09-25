@@ -89,7 +89,7 @@ describe EtTools::NatMonitor do
 
     it 'sets @conf correctly' do
       expect(@nat_monitor.instance_variable_get(:@conf)).to eq(
-        @yaml_conf.merge(@defaults)
+        @defaults.merge(@yaml_conf)
       )
     end
 
@@ -184,7 +184,7 @@ describe EtTools::NatMonitor do
       before do
         @nat_monitor.instance_variable_set(
           :@conf,
-          @yaml_conf.merge('mocking' => true).merge(@defaults)
+          @defaults.merge(@yaml_conf.merge('mocking' => true))
         )
       end
 
