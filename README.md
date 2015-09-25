@@ -44,6 +44,7 @@ nodes:
 ```
 
 Optional properties include (Values shown are the defaults):
+
 ```yaml
 pings: 3
 ping_timeout: 1
@@ -51,13 +52,16 @@ heartbeat_interval: 10
 ```
 
 Optional AWS configuration include:
+
 ```yaml
 aws_access_key_id: YOUR ACCESS KEY
 aws_secret_access_key: YOUR SECRET KEY
 region: us-east-1
 ```
+
 Note that:
-  - If you don't specify the aws credentials it will use the IAM role of the instance
+
+- If you don't specify the AWS credentials it will use the IAM role of the instance
 
 ## Contributing
 
