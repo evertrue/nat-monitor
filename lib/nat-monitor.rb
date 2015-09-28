@@ -21,19 +21,18 @@ module EtTools
     end
 
     def validate!
-      exit_code = false
-
-      case
-      when !@conf['route_table_id']
-        msg = 'route_table_id not specified'
-        exit_code = 1
-      when !route_exists?(@conf['route_table_id'])
-        msg = "Route #{@conf['route_table_id']} not found"
-        exit_code = 2
-      when @conf['nodes'].count < 3
-        msg = '3 or more nodes are required to create a quorum'
-        exit_code = 3
-      end
+      exit_code =
+        case
+        when !@conf['route_table_id']
+          msg = 'route_table_id not specified'
+          1
+        when !route_exists?(@conf['route_table_id'])
+          msg = "Route #{@conf['route_table_id']} not found"
+          2
+        when @conf['nodes'].count < 3
+          msg = '3 or more nodes are required to create a quorum'
+          3
+        end
 
       return unless exit_code
 
