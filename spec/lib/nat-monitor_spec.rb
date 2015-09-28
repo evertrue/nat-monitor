@@ -14,9 +14,9 @@ describe EtTools::NatMonitor do
                    'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
                    'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
                    'monitor_urls' => {
-                     'begin'   => 'run',
-                     'success' => 'complete',
-                     'fail'    => 'fail'
+                     'run'      => 'run',
+                     'complete' => 'complete',
+                     'fail'     => 'fail'
                    },
                    'nodes' => (
                      { @my_instance_id => '1.1.1.1' }

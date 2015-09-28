@@ -50,9 +50,9 @@ module EtTools
     def main_loop
       loop do
         begin
-          notify_monitor 'begin'
+          notify_monitor 'run'
           heartbeat
-          notify_monitor 'success'
+          notify_monitor 'complete'
         rescue => e
           msg = "Caught #{e.class} exception: #{e.message}"
           notify_monitor 'fail', msg
