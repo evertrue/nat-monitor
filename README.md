@@ -71,7 +71,7 @@ The NAT Monitor has the ability to report out, via a simple URL request, its sta
 Requisite configuration needed:
 
 ```yaml
-monitor:
+monitor_urls:
     begin: your.url/run
     success: your.url/complete
     fail: your.url/fail

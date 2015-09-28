@@ -159,7 +159,7 @@ module EtTools
     def notify_monitor(status, msg = nil)
       output msg
       return unless @conf['monitor_enabled']
-      url = @conf['monitor'][status]
+      url = @conf['monitor_urls'][status]
       url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
 
       output 'Notifying external heartbeat monitor'
