@@ -160,7 +160,7 @@ module EtTools
     def notify_monitor(status, msg = nil)
       output msg
       return unless @conf['monitor_enabled']
-      url = monitor_url status
+      url = @conf['monitor'][status]
       url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
 
       output 'Notifying external heartbeat monitor'
@@ -179,10 +179,6 @@ module EtTools
       Syslog.open('nat-monitor', Syslog::LOG_PID | Syslog::LOG_CONS) do |s|
         s.send(level, message)
       end
-    end
-
-    def monitor_url(status)
-      @conf['monitor'][status]
     end
   end
 end
