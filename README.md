@@ -72,8 +72,8 @@ Requisite configuration needed:
 
 ```yaml
 monitor_urls:
-    begin: your.url/run
-    success: your.url/complete
+    run: your.url/run
+    complete: your.url/complete
     fail: your.url/fail
 ```
 
