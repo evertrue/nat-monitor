@@ -38,7 +38,6 @@ module EtTools
       return unless exit_code
 
       notify_monitor 'fail', msg
-      output msg
       exit exit_code
     end
 
@@ -58,7 +57,6 @@ module EtTools
         rescue => e
           msg = "Caught #{e.class} exception: #{e.message}"
           notify_monitor 'fail', msg
-          output msg
           output e.backtrace
         end
         sleep @conf['heartbeat_interval']
@@ -160,9 +158,12 @@ module EtTools
     end
 
     def notify_monitor(status, msg = nil)
+      output msg
       return unless @conf['monitor_enabled']
       url = monitor_url status
       url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
+
+      output 'Notifying external heartbeat monitor'
 
       Net::HTTP.get(URI url)
     end
