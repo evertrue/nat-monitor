@@ -160,11 +160,11 @@ module EtTools
       output msg
       return unless @conf['monitor_enabled']
       url = @conf['monitor_urls'][status]
-      url += "?msg=#{url_encode msg}" if status == 'fail' && !msg.nil?
+      url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
 
       output 'Notifying external heartbeat monitor'
 
-      Net::HTTP.get(URI url)
+      Net::HTTP.get(URI.escape url)
     end
 
     private
