@@ -164,7 +164,7 @@ module EtTools
 
       output 'Notifying external heartbeat monitor'
 
-      Net::HTTP.get(URI.escape url)
+      Net::HTTP.get(URI(URI.escape url))
     end
 
     private
