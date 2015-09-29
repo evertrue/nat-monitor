@@ -157,7 +157,7 @@ module EtTools
     end
 
     def notify_monitor(status, msg = nil)
-      output msg
+      output msg unless msg.nil?
       return unless @conf['monitor_enabled']
       url = @conf['monitor_urls'][status]
       url += "?msg=#{msg}" if status == 'fail' && !msg.nil?
