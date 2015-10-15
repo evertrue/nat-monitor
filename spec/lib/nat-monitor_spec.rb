@@ -13,11 +13,7 @@ describe EtTools::NatMonitor do
     @yaml_conf = { 'route_table_id' => @route_table_id,
                    'aws_access_key_id' => 'AWS_ACCESS_KEY_ID',
                    'aws_secret_access_key' => 'AWS_SECRET_ACCESS_KEY',
-                   'monitor_urls' => {
-                     'run'      => 'run',
-                     'complete' => 'complete',
-                     'fail'     => 'fail'
-                   },
+                   'monitor_code' => 'abcd',
                    'nodes' => (
                      { @my_instance_id => '1.1.1.1' }
                    ).merge(@other_nodes) }

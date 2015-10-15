@@ -66,15 +66,37 @@ Note that:
 
 - If you don't specify the AWS credentials it will use the IAM role of the instance
 
-The NAT Monitor has the ability to report out, via a simple URL request, its start, success, and failures. This functionality is modeled after what [Cronitor.io](http://cronitor.io) expects.
+The NAT Monitor has the ability to report out to [Cronitor.io](http://cronitor.io) its status. This comes courtesy of the [`cronitor`](https://github.com/evertrue/cronitor) gem.
 
-Requisite configuration needed:
+You will need to set `monitor_enabled: true` and then supply either a Cronitor API token & monitor options:
 
 ```yaml
-monitor_urls:
-    run: your.url/run
-    complete: your.url/complete
-    fail: your.url/fail
+monitor_enabled: true
+monitor_token: abcd
+monitor_opts:
+  name: My Fancy Monitor
+  notifications:
+    emails:
+      - test@example.com
+    slack:
+      - https://url-to-slack.webhook
+    pagerduty:
+      - pagerduty-service-api-token
+    phones:
+      - +12345678900
+    webhooks:
+      - 'http://example.com'
+  rules:
+    - rule_type: 'not_run_in',
+      duration: 5,
+      time_unit: 'seconds'
+```
+
+or the code for an existing Cronitor monitor:
+
+```yaml
+monitor_enabled: true
+monitor_code: abcd
 ```
 
 ## Contributing

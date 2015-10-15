@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'net-ping'
   spec.add_runtime_dependency 'fog', '~> 1.23', '>= 1.30'
+  spec.add_runtime_dependency 'cronitor', '~> 1.1'
 end

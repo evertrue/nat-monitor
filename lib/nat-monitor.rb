@@ -156,15 +156,26 @@ module EtTools
       current_master == node_id
     end
 
+    def monitor
+      return unless @conf['monitor_enabled']
+
+      if @conf['monitor_token']
+        @monitor ||= Cronitor.new(
+          token: @conf['monitor_token'],
+          opts: @conf['monitor_opts']
+        )
+      else
+        @monitor ||= Cronitor.new code: @conf['monitor_code']
+      end
+    end
+
     def notify_monitor(status, msg = nil)
       output msg unless msg.nil?
       return unless @conf['monitor_enabled']
-      url = @conf['monitor_urls'][status]
-      url += "?msg=#{URI.escape(msg)}" if status == 'fail' && !msg.nil?
 
-      output 'Notifying external heartbeat monitor'
+      output 'Notifying Cronitor'
 
-      Net::HTTP.get(URI url)
+      monitor.ping status, msg
     end
 
     private
