@@ -5,6 +5,7 @@ module EtTools
     require 'fog'
     require 'yaml'
     require 'syslog'
+    require 'cronitor'
 
     def initialize(conf_file = nil)
       @conf = defaults.merge load_conf(conf_file)
