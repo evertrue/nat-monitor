@@ -160,12 +160,12 @@ module EtTools
       return unless @conf['monitor_enabled']
 
       if @conf['monitor_token']
-        @monitor ||= Cronitor.new(
+        @monitor ||= ::Cronitor.new(
           token: @conf['monitor_token'],
           opts: @conf['monitor_opts']
         )
       else
-        @monitor ||= Cronitor.new code: @conf['monitor_code']
+        @monitor ||= ::Cronitor.new code: @conf['monitor_code']
       end
     end
 
