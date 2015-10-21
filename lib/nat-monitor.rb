@@ -58,7 +58,7 @@ module EtTools
         rescue => e
           msg = "Caught #{e.class} exception: #{e.message}"
           notify_monitor 'fail', msg
-          output e.backtrace
+          output e.backtrace.join("\n")
         end
         sleep @conf['heartbeat_interval']
       end
