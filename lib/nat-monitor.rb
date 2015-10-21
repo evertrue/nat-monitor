@@ -174,7 +174,9 @@ module EtTools
       output msg unless msg.nil?
       return unless @conf['monitor_enabled']
 
-      output 'Notifying Cronitor'
+      unless %w(run complete).include?(status)
+        output "Notifying Cronitor: #{status}"
+      end
 
       monitor.ping status, msg
     end
