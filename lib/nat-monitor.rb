@@ -9,6 +9,7 @@ module EtTools
 
     def initialize(conf_file = nil)
       @conf = defaults.merge load_conf(conf_file)
+      @already_master = false
     end
 
     def load_conf(conf_file = nil)
@@ -57,7 +58,7 @@ module EtTools
         rescue => e
           msg = "Caught #{e.class} exception: #{e.message}"
           notify_monitor 'fail', msg
-          output e.backtrace
+          output e.backtrace.join("\n")
         end
         sleep @conf['heartbeat_interval']
       end
@@ -65,9 +66,10 @@ module EtTools
 
     def heartbeat
       if am_i_master?
-        output "Looks like I'm the master"
+        output "Looks like I'm the master" unless @already_master
         return
       end
+      @already_master = false
       un = unreachable_nodes
       return if un.empty?
       if un.count == other_nodes.keys.count # return if I'm unreachable...
@@ -174,7 +176,9 @@ module EtTools
       output msg unless msg.nil?
       return unless @conf['monitor_enabled']
 
-      output 'Notifying Cronitor'
+      unless %w(run complete).include?(status)
+        output "Notifying Cronitor: #{status}"
+      end
 
       monitor.ping status, msg
     end
